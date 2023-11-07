@@ -7,10 +7,12 @@ To use GROUP BY, need to use Aggreagate Function on any selected variable.
 
 COMPLICATIONS: 
 A complication emerged during the project. Navicat was unable to import date from excel file. What troubleshooters were tried and what happened.
-Turned file to CSV according to shakil. Result was no single data was retrieved. 
-Changed date format to YYYY-MM-DD format. Successful. 
-Secondly I was getting error after putting two Where argument in single code. 
+1. Turned file to CSV according to shakil. Result was no single data was retrieved. 
+2. Changed date format to YYYY-MM-DD format. Successful. 
+3. Secondly I was getting error after putting two Where argument in single code. 
 Solution: In my case I needed to put AND for WHERE argument. Putting two Where is wrong. 
+
+
 First import two xlsx files into the navicat
 
 DATA EXPLORATION:
