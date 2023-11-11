@@ -1,5 +1,12 @@
 
 
+/*
+Covid 19 Data Exploration 
+
+Skills used: Joins, CTEs, Temp Tables, Aggregate Functions, Creating Views
+
+*/
+
 
 
 -- Selecting the data we will work with 
@@ -8,13 +15,13 @@ FROM coviddeaths
 ORDER BY 1,2
 
 -- Total cases vs Total coviddeaths
--- Shows likelihood of dying if u contract covid in your country
+-- Shows the possibility of dying in case of contracting COVID in countries all around the world
 SELECT Location, date, total_cases, new_cases, new_deaths, (total_deaths/total_cases)*100 as death_percentage
 FROM coviddeaths
 WHERE continent IS NOT NULL
 ORDER BY 1,2
 
--- for United States
+-- for the United States
 SELECT location, date, total_cases, new_cases, new_deaths, (total_deaths/total_cases)*100 as death_percentage
 FROM coviddeaths
 WHERE continent IS NOT NULL
@@ -24,7 +31,7 @@ ORDER BY 1,2
 SELECT * FROM coviddeaths Where location = 'United States'
 
 -- Total Cases vs Population
--- Shows what percentage of population got covid  
+-- Shows what percentage of the population got COVID19  
 SELECT Location, date, total_cases, population, (total_cases/population)*100 AS PopulationPercentage
 FROM coviddeaths
 ORDER BY 1,2
@@ -35,7 +42,7 @@ FROM coviddeaths
 GROUP BY location, population 
 ORDER BY PercentPopulationInfected DESC 
 
--- Showing countries with highest death count per population  
+-- Showing countries with the highest death count per population  
 SELECT Location, MAX(total_deaths) AS highest_death_count
 FROM coviddeaths
 WHERE continent IS NOT NULL 
@@ -43,16 +50,7 @@ GROUP BY location
 ORDER BY highest_death_count DESC
 
 -- Breaking things by continent
--- Showing countries with highest death count per population  
--- Incorrect Number 
--- See note and video to know why still kept it even tho incorrect number 
-SELECT Location, MAX(total_deaths) AS highest_death_count
-FROM coviddeaths
-WHERE continent IS NOT NULL 
-GROUP BY location
-ORDER BY highest_death_count DESC
-
--- Currect Number
+-- Showing countries with the highest death count per population  
 Select location, MAX(Total_deaths) as TotalDeathCount
 From coviddeaths
 Where continent is null 
@@ -95,36 +93,7 @@ WHERE dea.continent IS NOT NULL
 SELECT * ,(RollingCountPopulationVaccinated/Population)*100
 FROM POPSVSVAC
 
-
-
-/* This section from my own. Practicing to get max vaccination rate. Last code is the correct and intended one
 -- To find the higest vaccination rate 
-WITH POPSVSVAC (continent, location, population, new_vaccinations, RollingCountPopulationVaccinated)
-AS
-(
-SELECT dea.continent, dea.location, dea.population, vac.new_vaccinations, 
-MAX(vac.new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location) AS RollingCountPopulationVaccinated
-FROM coviddeaths dea
-JOIN covidvaccinations vac
-ON dea.location = vac.location
--- AND dea.date = vac.date
-WHERE dea.continent IS NOT NULL
--- ORDER BY 1,3
-)
-
-SELECT * , (RollingCountPopulationVaccinated)
-FROM POPSVSVAC
-
-SELECT dea.continent, dea.location, dea.population, 
-MAX(vac.new_vaccinations) AS RollingCountPopulationVaccinated
-FROM coviddeaths dea
-JOIN covidvaccinations vac
-ON dea.location = vac.location
-WHERE dea.continent IS NOT NULL
-GROUP BY dea.continent,dea.location
-ORDER BY dea.location 
--- AND dea.date = vac.date
-
 SELECT dea.location, dea.population, 
 MAX(vac.new_vaccinations)
 FROM coviddeaths dea
